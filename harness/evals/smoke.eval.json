@@ -1,0 +1,49 @@
+{
+  "name": "smoke",
+  "description": "Basic harness sanity checks for this folder",
+  "cases": [
+    {
+      "id": "workspace-path-visible",
+      "description": "Current working path should include folder name",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        "Get-Location | Select-Object -ExpandProperty Path"
+      ],
+      "expect": {
+        "exitCode": 0,
+        "stdoutIncludes": [
+          "_younghoon_sermon"
+        ]
+      }
+    },
+    {
+      "id": "node-runtime-available",
+      "description": "Node runtime should be callable",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "expect": {
+        "exitCode": 0,
+        "stdoutIncludes": [
+          "v"
+        ]
+      }
+    },
+    {
+      "id": "directory-list-command-works",
+      "description": "Directory listing should execute without error",
+      "command": [
+        "powershell",
+        "-NoProfile",
+        "-Command",
+        "Get-ChildItem -Force | Out-String"
+      ],
+      "expect": {
+        "exitCode": 0
+      }
+    }
+  ]
+}

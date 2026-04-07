@@ -1,0 +1,10 @@
+{
+  "name": "younghoon-sermon-harness",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Reusable evaluation harness scaffold",
+  "scripts": {
+    "harness": "node harness/run-harness.mjs",
+    "harness:ci": "node harness/run-harness.mjs --attempts 3"
+  }
+}

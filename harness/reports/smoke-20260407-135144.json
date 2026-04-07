@@ -1,0 +1,89 @@
+{
+  "evalName": "smoke",
+  "evalPath": "D:\\Ai_aigent\\_younghoon_sermon\\harness\\evals\\smoke.eval.json",
+  "attemptsPerCase": 1,
+  "timeoutMs": 10000,
+  "startedAt": "2026-04-07T04:51:44.141Z",
+  "summary": {
+    "totalCases": 3,
+    "passAtKCount": 3,
+    "passHatKCount": 3,
+    "passAtKRate": "100.0%",
+    "passHatKRate": "100.0%"
+  },
+  "cases": [
+    {
+      "id": "workspace-path-visible",
+      "description": "Current working path should include folder name",
+      "passAtK": true,
+      "passHatK": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": [
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "Get-Location | Select-Object -ExpandProperty Path"
+          ],
+          "stdout": "D:\\Ai_aigent\\_younghoon_sermon",
+          "stderr": "",
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "durationMs": 314,
+          "pass": true,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "node-runtime-available",
+      "description": "Node runtime should be callable",
+      "passAtK": true,
+      "passHatK": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": [
+            "node",
+            "--version"
+          ],
+          "stdout": "v25.6.1",
+          "stderr": "",
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "durationMs": 48,
+          "pass": true,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": "directory-list-command-works",
+      "description": "Directory listing should execute without error",
+      "passAtK": true,
+      "passHatK": true,
+      "attempts": [
+        {
+          "attempt": 1,
+          "command": [
+            "powershell",
+            "-NoProfile",
+            "-Command",
+            "Get-ChildItem -Force | Out-String"
+          ],
+          "stdout": "���͸�: D:\\Ai_aigent\\_younghoon_sermon\r\n\r\n\r\nMode                 LastWriteTime         Length Name                                                                 \r\n----                 -------------         ------ ----                                                                 \r\nd-----        2026-04-07   ���� 1:51                harness                                                              \r\n-a----        2026-04-07   ���� 1:51           1212 HARNESS.md                                                           \r\n-a----        2026-04-07   ���� 1:50            268 package.json",
+          "stderr": "",
+          "exitCode": 0,
+          "signal": null,
+          "timedOut": false,
+          "durationMs": 351,
+          "pass": true,
+          "failures": []
+        }
+      ]
+    }
+  ]
+}
