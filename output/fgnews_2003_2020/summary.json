@@ -1,0 +1,123 @@
+{
+  "range": {
+    "start": "2003-07-13",
+    "end": "2020-12-27"
+  },
+  "totalSermons": 604,
+  "notebooklmLimits": {
+    "assumedMaxWordsPerSource": 500000,
+    "appliedSafeLimitWordsPerSource": 420000
+  },
+  "yearly": [
+    {
+      "year": "2009",
+      "sermons": 46,
+      "words": 51739,
+      "file": "yearly_docx\\2009_sermons.docx"
+    },
+    {
+      "year": "2010",
+      "sermons": 45,
+      "words": 49786,
+      "file": "yearly_docx\\2010_sermons.docx"
+    },
+    {
+      "year": "2011",
+      "sermons": 48,
+      "words": 56828,
+      "file": "yearly_docx\\2011_sermons.docx"
+    },
+    {
+      "year": "2012",
+      "sermons": 52,
+      "words": 71477,
+      "file": "yearly_docx\\2012_sermons.docx"
+    },
+    {
+      "year": "2013",
+      "sermons": 50,
+      "words": 66993,
+      "file": "yearly_docx\\2013_sermons.docx"
+    },
+    {
+      "year": "2014",
+      "sermons": 51,
+      "words": 68470,
+      "file": "yearly_docx\\2014_sermons.docx"
+    },
+    {
+      "year": "2015",
+      "sermons": 51,
+      "words": 100990,
+      "file": "yearly_docx\\2015_sermons.docx"
+    },
+    {
+      "year": "2016",
+      "sermons": 52,
+      "words": 103774,
+      "file": "yearly_docx\\2016_sermons.docx"
+    },
+    {
+      "year": "2017",
+      "sermons": 53,
+      "words": 132535,
+      "file": "yearly_docx\\2017_sermons.docx"
+    },
+    {
+      "year": "2018",
+      "sermons": 52,
+      "words": 131570,
+      "file": "yearly_docx\\2018_sermons.docx"
+    },
+    {
+      "year": "2019",
+      "sermons": 52,
+      "words": 122895,
+      "file": "yearly_docx\\2019_sermons.docx"
+    },
+    {
+      "year": "2020",
+      "sermons": 52,
+      "words": 118809,
+      "file": "yearly_docx\\2020_sermons.docx"
+    }
+  ],
+  "mergedForNotebookLm": [
+    {
+      "pack": 1,
+      "years": [
+        "2009",
+        "2010",
+        "2011",
+        "2012",
+        "2013",
+        "2014"
+      ],
+      "sermons": 292,
+      "words": 365293,
+      "file": "notebooklm_merged_docx\\NotebookLM_pack_01_2009-2014.docx"
+    },
+    {
+      "pack": 2,
+      "years": [
+        "2015",
+        "2016",
+        "2017"
+      ],
+      "sermons": 156,
+      "words": 337299,
+      "file": "notebooklm_merged_docx\\NotebookLM_pack_02_2015-2017.docx"
+    },
+    {
+      "pack": 3,
+      "years": [
+        "2018",
+        "2019",
+        "2020"
+      ],
+      "sermons": 156,
+      "words": 373274,
+      "file": "notebooklm_merged_docx\\NotebookLM_pack_03_2018-2020.docx"
+    }
+  ]
+}
