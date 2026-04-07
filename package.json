@@ -5,6 +5,10 @@
   "description": "Reusable evaluation harness scaffold",
   "scripts": {
     "harness": "node harness/run-harness.mjs",
-    "harness:ci": "node harness/run-harness.mjs --attempts 3"
+    "harness:ci": "node harness/run-harness.mjs --attempts 3",
+    "build:fgnews": "node scripts/export_fgnews_sermons.mjs"
+  },
+  "dependencies": {
+    "docx": "^9.6.1"
   }
 }

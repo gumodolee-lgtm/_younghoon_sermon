@@ -1,0 +1,66 @@
+{
+  "range": {
+    "start": "2021-01-03",
+    "end": "2025-12-28"
+  },
+  "totalSermons": 261,
+  "notebooklmLimits": {
+    "assumedMaxWordsPerSource": 500000,
+    "appliedSafeLimitWordsPerSource": 420000
+  },
+  "yearly": [
+    {
+      "year": "2021",
+      "sermons": 52,
+      "words": 122889,
+      "file": "yearly_docx\\2021_sermons.docx"
+    },
+    {
+      "year": "2022",
+      "sermons": 52,
+      "words": 125474,
+      "file": "yearly_docx\\2022_sermons.docx"
+    },
+    {
+      "year": "2023",
+      "sermons": 53,
+      "words": 132954,
+      "file": "yearly_docx\\2023_sermons.docx"
+    },
+    {
+      "year": "2024",
+      "sermons": 52,
+      "words": 129096,
+      "file": "yearly_docx\\2024_sermons.docx"
+    },
+    {
+      "year": "2025",
+      "sermons": 52,
+      "words": 126396,
+      "file": "yearly_docx\\2025_sermons.docx"
+    }
+  ],
+  "mergedForNotebookLm": [
+    {
+      "pack": 1,
+      "years": [
+        "2021",
+        "2022",
+        "2023"
+      ],
+      "sermons": 157,
+      "words": 381317,
+      "file": "notebooklm_merged_docx\\NotebookLM_pack_01_2021-2023.docx"
+    },
+    {
+      "pack": 2,
+      "years": [
+        "2024",
+        "2025"
+      ],
+      "sermons": 104,
+      "words": 255492,
+      "file": "notebooklm_merged_docx\\NotebookLM_pack_02_2024-2025.docx"
+    }
+  ]
+}
