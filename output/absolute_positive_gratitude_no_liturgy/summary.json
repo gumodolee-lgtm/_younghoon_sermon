@@ -1,0 +1,13 @@
+{
+  "sourceListUrl": "http://www.fgnews.co.kr/front/sub/list.do?first_category_id=1&second_category_id=8",
+  "listBase": "http://pastorlee.fgtv.com/fgnews/pastorlee_list.asp",
+  "collectedAt": "2026-04-11T03:54:57.340Z",
+  "totalPages": 111,
+  "totalCollected": 1101,
+  "totalMatched": 281,
+  "output": {
+    "docx": "이영훈목사_절대긍정_절대감사_설교모음_20260411_찬송가복음성가기도제외.docx",
+    "json": "output\\absolute_positive_gratitude_no_liturgy\\matched_sermons.json",
+    "txt": "output\\absolute_positive_gratitude_no_liturgy\\matched_sermons.txt"
+  }
+}

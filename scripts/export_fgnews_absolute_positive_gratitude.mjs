@@ -5,10 +5,10 @@ import { AlignmentType, Document, HeadingLevel, Packer, Paragraph, TextRun } fro
 const LIST_BASE = "http://pastorlee.fgtv.com/fgnews/pastorlee_list.asp";
 const SOURCE_LIST_URL =
   "http://www.fgnews.co.kr/front/sub/list.do?first_category_id=1&second_category_id=8";
-const OUTPUT_DIR = path.resolve(process.cwd(), "output", "absolute_positive_gratitude");
+const OUTPUT_DIR = path.resolve(process.cwd(), "output", "absolute_positive_gratitude_no_liturgy");
 const OUTPUT_DOCX = path.resolve(
   process.cwd(),
-  "이영훈목사_절대긍정_절대감사_설교모음_20260411.docx"
+  "이영훈목사_절대긍정_절대감사_설교모음_20260411_찬송가복음성가기도제외.docx"
 );
 const OUTPUT_JSON = path.join(OUTPUT_DIR, "matched_sermons.json");
 const OUTPUT_TXT = path.join(OUTPUT_DIR, "matched_sermons.txt");
@@ -21,6 +21,10 @@ const KEYWORDS = [
   { key: "절대 긍정", regex: /절대\s*긍정/g },
   { key: "절대 감사", regex: /절대\s*감사/g }
 ];
+
+const EXPLICIT_LITURGY_REGEX =
+  /(<\s*찬송가|<\s*복음성가|<\s*기도\s*>|<\s*축도\s*>|찬송가\s*\d+\s*장|복음성가|주기도문|대표기도|통성기도|헌금기도|축도|기도하겠습니다|기도드리겠습니다|기도하시겠습니다)/;
+const GENERIC_TAIL_REGEX = /(오늘\s*마지막\s*찬양|함께\s*기도|찬양\s*하겠습니다|^\(?기도\)?$)/;
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -192,6 +196,61 @@ function htmlToLinesPreserveBlocks(contentHtml) {
   return lines;
 }
 
+function stripLiturgyTail(lines) {
+  if (!Array.isArray(lines) || lines.length === 0) return [];
+
+  const cutAtMatch = (startIndex, regex) => {
+    for (let i = startIndex; i < lines.length; i += 1) {
+      const line = lines[i];
+      const matched = line.match(regex);
+      if (!matched) continue;
+
+      const markerIndex = matched.index ?? 0;
+      const prefix = line.slice(0, markerIndex).trim();
+      const before = lines.slice(0, i);
+      if (prefix) before.push(prefix);
+      return before;
+    }
+    return null;
+  };
+
+  const explicitStart = Math.floor(lines.length * 0.2);
+  const explicitCut = cutAtMatch(explicitStart, EXPLICIT_LITURGY_REGEX);
+  if (explicitCut) return explicitCut;
+
+  const genericStart = Math.floor(lines.length * 0.35);
+  const genericCut = cutAtMatch(genericStart, GENERIC_TAIL_REGEX);
+  if (genericCut) return genericCut;
+
+  return lines;
+}
+
+function removeStandaloneLiturgyLines(lines) {
+  const markerOnlyRegex =
+    /^(<\s*)?(찬송가\s*\d+\s*장|찬송가|복음성가|대표기도|통성기도|헌금기도|주기도문|축도|기도)(\s*>|\s*)$/;
+  const shortMarkerRegex = /(찬송가|복음성가|기도|주기도문|축도)/;
+  const dropContainsRegex =
+    /(찬송가\s*\d+\s*장|복음성가|통성기도|대표기도|헌금기도|주기도문|축도|기도하겠습니다|기도드리겠습니다|기도하시겠습니다|함께\s*기도하겠습니다|다\s*같이\s*기도하겠습니다|\(통성기도\)|주여!\s*주여!\s*주여!)/;
+
+  const filtered = lines.filter((line) => {
+    if (!line) return true;
+
+    if (markerOnlyRegex.test(line)) return false;
+    if (/^\(.{0,20}기도\)$/.test(line)) return false;
+    if (dropContainsRegex.test(line)) return false;
+
+    const compact = line.replace(/\s+/g, "");
+    if (compact.length <= 24 && shortMarkerRegex.test(line)) return false;
+
+    return true;
+  });
+
+  while (filtered.length > 0 && filtered[0] === "") filtered.shift();
+  while (filtered.length > 0 && filtered[filtered.length - 1] === "") filtered.pop();
+
+  return filtered;
+}
+
 function parseDetail(detailHtml, fallbackTitle) {
   const titleMatch = detailHtml.match(/<div class="view_title[^"]*">\s*([\s\S]*?)\s*<\/div>/i);
   const title = cleanInlineText(titleMatch?.[1] ?? fallbackTitle ?? "");
@@ -205,13 +264,15 @@ function parseDetail(detailHtml, fallbackTitle) {
   }
 
   contentHtml = contentHtml.replace(/<\/div>\s*$/i, "").trim();
-  const searchable = normalizeForSearch(`${stripTagsToText(contentHtml)}\n${ttsText}`);
-  const lines = htmlToLinesPreserveBlocks(contentHtml);
+  const rawLines = htmlToLinesPreserveBlocks(contentHtml);
+  const tailTrimmed = stripLiturgyTail(rawLines);
+  const lines = removeStandaloneLiturgyLines(tailTrimmed);
+
+  const searchable = normalizeForSearch(lines.join("\n"));
   const keywordInfo = matchesKeywords(searchable);
 
   return {
     title,
-    contentHtml,
     lines,
     searchable,
     keywordInfo
@@ -241,7 +302,7 @@ async function mapWithConcurrency(items, limit, worker) {
 
 function buildTextExport(matched) {
   const lines = [];
-  lines.push("이영훈 목사 설교 중 절대 긍정/절대 감사 관련 설교 모음");
+  lines.push("이영훈 목사 설교 중 절대 긍정/절대 감사 관련 설교 모음 (찬송가/복음성가/기도 제외)");
   lines.push(`생성일시: ${new Date().toISOString()}`);
   lines.push(`출처 목록: ${SOURCE_LIST_URL}`);
   lines.push(`전체 수집 설교: ${matched.totalCollected}`);
@@ -292,7 +353,9 @@ async function writeDocx(filePath, sermons, totalCollected) {
     new Paragraph({
       heading: HeadingLevel.HEADING_1,
       alignment: AlignmentType.CENTER,
-      children: [new TextRun({ text: "이영훈 목사 설교: 절대 긍정/절대 감사 포함 설교 모음", bold: true })]
+      children: [
+        new TextRun({ text: "이영훈 목사 설교: 절대 긍정/절대 감사 포함 설교 모음 (찬송가·복음성가·기도 제외)", bold: true })
+      ]
     })
   );
   children.push(
@@ -476,3 +539,4 @@ main().catch((error) => {
   console.error(`Failed: ${error.message}`);
   process.exitCode = 1;
 });
+
